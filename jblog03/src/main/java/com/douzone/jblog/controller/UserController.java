@@ -62,10 +62,10 @@ public class UserController {
 		return "user/joinsuccess";
 	}
 	
-//	@RequestMapping("/login")
-//	public String login() {
-//		
-//	}
+	@RequestMapping("/login")
+	public String login() {
+		
+	}
 	
 	
 }
