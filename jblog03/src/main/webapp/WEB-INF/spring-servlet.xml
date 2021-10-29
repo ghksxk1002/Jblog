@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc
+	    http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+
+
+	<!-- Auto proxy : @ 붙어있는 어노테이션을 찾는다 -->
+	<aop:aspectj-autoproxy />
+
+	<!--  ViewResolver 설정 : jsp 이름 설정  -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver ">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+
+
+	<!-- 
+	 interceptor 
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.douzone.jblog.interceptor.SiteInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/user/auth"/>
+			<bean class="com.douzone.jblog.security.LoginInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/user/logout"/>
+			<bean class="com.douzone.jblog.security.LogoutInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/user/auth"/>
+			<mvc:exclude-mapping path="/user/logout"/>
+			<mvc:exclude-mapping path="/assets/**"/>
+			<bean class="com.douzone.mysite.security.AuthInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	 -->
+
+	<!-- 멀티파트 리졸버 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+		<!-- 최대업로드 가능한 바이트크기 -->
+		<property name="maxUploadSize" value="52428800" />
+
+		<!-- 디스크에 임시 파일을 생성하기 전에 메모리에 보관할수있는 최대 바이트 크기 -->
+		<!-- property name="maxInMemorySize" value="52428800" / -->
+
+		<!-- defaultEncoding : 읽어오는 String 타입을 인코딩 -->
+		<property name="defaultEncoding" value="utf-8" />
+	</bean>
+	
+	 <!-- 6. MessageSource : vlaid 메세지 커스텀-->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+	   <property name="basenames">
+	      <list>
+			<value>messages/messages_ko</value>
+	      </list>
+	   </property>
+	</bean>
+		
+
+	<!-- mvc url-resource mapping 
+	<mvc:resources mapping="/gallery/images/**"	location="file:/upload-mysite/" />
+	<mvc:resources mapping="/images/**"	location="file:/upload-mysite/" />
+	-->
+
+
+	<!-- validator, conversionService, messageConverter를 자동으로 등록 -->
+	<mvc:annotation-driven>
+	<!-- 	<mvc:argument-resolvers>
+			<bean class="com.douzone.mysite.security.AuthUserHandlerMethodArgumentResolver" />
+		</mvc:argument-resolvers> -->
+		<mvc:message-converters>
+			<bean
+				class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<!-- 서블릿 컨테이너(tomcat)의 디폴트 서블릿 위임(Delegate) 핸들러 : css 가 깨지면 설정해보자 -->
+	<mvc:default-servlet-handler />
+	<!-- bean 설정을 어노테이션으로 할꺼라는 설정 -->
+	<context:annotation-config />
+	<!-- 컨테이너에게 알려줄 어노테이션으로 설정된 페키지의 위치와 클레스의 위치를 알려주는것 -->
+	<context:component-scan base-package="com.douzone.jblog.controller, com.douzone.jblog.exception" />
+
+</beans>
