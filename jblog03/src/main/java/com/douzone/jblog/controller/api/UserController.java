@@ -19,8 +19,8 @@ public class UserController {
 	private UserService userService;
 	
 	//@ResponseBody
-	@GetMapping("/checkeid")
-	public JsonRrsult checkeid(@RequestParam(value="id", required=true, defaultValue="") String id) {
+	@GetMapping("/checkid")
+	public JsonRrsult checkid(@RequestParam(value="id", required=true, defaultValue="") String id) {
 		UserVo userVo = userService.getUser(id);
 //		
 //		Map<String, Object> map = new HashMap<>();
