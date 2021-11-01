@@ -34,8 +34,11 @@ public class UserController {
 	
 	@RequestMapping(value="/join", method = RequestMethod.POST)
 	//@ModelAttribute @Valid UserVo vo -- > UserVo의 이름으로 잘못입력한 값을 model에 담아줌 = model.addAttribute("userVo", uservo); 이것과 같다
-	public String join(@ModelAttribute @Valid UserVo vo, BindingResult result, Model model) {
-		System.out.println("11111111111");
+	public String join(
+			@ModelAttribute @Valid UserVo vo, 
+			BindingResult result, 
+			Model model) {
+		System.out.println("[join] 가입하기를 눌렀다");
 		// 발리드 값 셋팅
 		// 1. reuslt에 에러가 있느닞 확인
 		if(result.hasErrors()) {
@@ -49,11 +52,12 @@ public class UserController {
 //			 String에 키값이 object에 에러내용
 //			 키로 멥핑되어있는 내용을 계속해서 model에 세팅을 계속해준다
 			model.addAllAttributes(result.getModel());
+			userService.join(vo);
 			// 에러가 있으면 조인으로 돌려야됨
 			return "user/join";
 		}
 		System.out.println(vo);
-		//userService.join(vo);
+		userService.join(vo);
 		return "redirect:/user/joinsuccess";
 	}
 	
@@ -61,11 +65,4 @@ public class UserController {
 	public String joinsuccess() {
 		return "user/joinsuccess";
 	}
-	
-//	@RequestMapping("/login")
-//	public String login() {
-//		
-//	}
-	
-	
 }

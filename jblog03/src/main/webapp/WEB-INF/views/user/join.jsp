@@ -53,12 +53,7 @@ $(function(){
 <body>
 	<div class="center-content">
 		<h1 class="logo" style="background:url(${pageContext.request.contextPath}/assets/images/logo.jpg) no-repeat 0 0">JBlog</h1>
-		<ul class="menu">
-			<li><a href="${pageContext.request.contextPath}/user">로그인</a></li>
-			<li><a href="${pageContext.request.contextPath}/user/join">회원가입</a></li>
-			<li><a href="">로그아웃</a></li>
-			<li><a href="">내블로그</a></li>
-		</ul>
+		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<form:form modelAttribute="userVo" class="join-form" id="join-form" method="post" action="${pageContext.request.contextPath}/user/join">
 			<label class="block-label" for="name">이름</label> 
 			<form:input path="name" />
@@ -76,13 +71,23 @@ $(function(){
 			<input id="btn-check-id" type="button" value="id 중복체크">
 			<img id="img-check-id" style="display: none;" src="${pageContext.request.contextPath}/assets/images/check.png">
 			<p style="text-align:left; padding-left:0; color: #f00 "> 
-					<form:errors path="id"/>
+						<spring:hasBindErrors name="userVo">
+							<!-- name 이라는 필드에 에러가 있다면 오류내용 출력 -->
+							<c:if test="${errors.hasFieldErrors('id') }">
+								<spring:message code="${errors.getFieldError('id').codes[0] }" />
+							</c:if>
+						</spring:hasBindErrors>
 			</p>
 					
 			<label class="block-label">패스워드</label>
 			<form:input path="password" />
 			<p style="text-align:left; padding-left:0; color: #f00 "> 
-				<form:errors path="password"/>
+				<spring:hasBindErrors name="userVo">
+							<!-- name 이라는 필드에 에러가 있다면 오류내용 출력 -->
+							<c:if test="${errors.hasFieldErrors('password') }">
+								<spring:message code="${errors.getFieldError('password').codes[0] }" />
+							</c:if>
+						</spring:hasBindErrors>
 			</p>
 
 			<fieldset>

@@ -16,6 +16,11 @@ public class UserService {
 	
 	public void join(@Valid UserVo vo) {
 		userRepository.insert(vo);
+		userRepository.insertIdToBlog(vo);
+	}
+	
+	public UserVo getUser(String id, String password) {
+		return userRepository.findByIdAndPassword(id, password);
 	}
 	
 	public UserVo getUser(String id) {

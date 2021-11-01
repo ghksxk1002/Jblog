@@ -21,6 +21,7 @@ public class UserController {
 	//@ResponseBody
 	@GetMapping("/checkid")
 	public JsonRrsult checkid(@RequestParam(value="id", required=true, defaultValue="") String id) {
+		System.out.println("[checkid] ID가 입력되었다");
 		UserVo userVo = userService.getUser(id);
 //		
 //		Map<String, Object> map = new HashMap<>();

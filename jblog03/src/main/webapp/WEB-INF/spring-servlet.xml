@@ -31,13 +31,13 @@
 	
 
 
-	<!-- 
-	 interceptor 
+	 
+	 <!--interceptor  -->
 	<mvc:interceptors>
-		<mvc:interceptor>
+		<!-- <mvc:interceptor>
 			<mvc:mapping path="/**"/>
 			<bean class="com.douzone.jblog.interceptor.SiteInterceptor" />
-		</mvc:interceptor>
+		</mvc:interceptor> -->
 		<mvc:interceptor>
 			<mvc:mapping path="/user/auth"/>
 			<bean class="com.douzone.jblog.security.LoginInterceptor" />
@@ -51,10 +51,10 @@
 			<mvc:exclude-mapping path="/user/auth"/>
 			<mvc:exclude-mapping path="/user/logout"/>
 			<mvc:exclude-mapping path="/assets/**"/>
-			<bean class="com.douzone.mysite.security.AuthInterceptor" />
+			<bean class="com.douzone.jblog.security.AuthInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
-	 -->
+	
 
 	<!-- 멀티파트 리졸버 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -76,6 +76,7 @@
 			<value>messages/messages_ko</value>
 	      </list>
 	   </property>
+	   <property name="defaultEncoding" value="UTF-8"/>
 	</bean>
 		
 
@@ -87,9 +88,9 @@
 
 	<!-- validator, conversionService, messageConverter를 자동으로 등록 -->
 	<mvc:annotation-driven>
-	<!-- 	<mvc:argument-resolvers>
-			<bean class="com.douzone.mysite.security.AuthUserHandlerMethodArgumentResolver" />
-		</mvc:argument-resolvers> -->
+	<mvc:argument-resolvers>
+			<bean class="com.douzone.jblog.security.AuthUserHandlerMethodArgumentResolver" />
+		</mvc:argument-resolvers>
 		<mvc:message-converters>
 			<bean
 				class="org.springframework.http.converter.StringHttpMessageConverter">

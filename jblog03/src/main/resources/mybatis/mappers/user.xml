@@ -8,11 +8,26 @@
 		]]>	
 	</insert>
 	
+	<insert id="insertId" parameterType="uservo">
+		<![CDATA[
+		insert into blog values(#{id}, '안녕하세요', '/images/spring-logo.jpg')
+		]]>	
+	</insert>
+	
 	<select id="findById" parameterType="string" resultType="uservo">
 		<![CDATA[
 		select id, name, password
   		  from user
  		 where id =#{id}
+		]]>	
+	</select>
+	
+	<select id="findByEmailAndPassword" parameterType="map" resultType="uservo">
+		<![CDATA[
+		select id, name
+		from user 
+		where id=#{i }
+		and password=#{p }
 		]]>	
 	</select>
 </mapper>
