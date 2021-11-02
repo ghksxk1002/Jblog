@@ -29,7 +29,7 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 			return null;
 		}
 		
-		return session.getAttribute("authUser");
+		return (UserVo)session.getAttribute("authUser");
 	}
 
 	@Override

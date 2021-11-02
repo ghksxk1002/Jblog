@@ -4,7 +4,7 @@ package com.douzone.jblog.vo;
 public class BlogVo {
 	private String id;
 	private String title;
-	private String logo;
+	private String logoUrl;
 	public  String getId() {
 		return id;
 	}
@@ -18,14 +18,14 @@ public class BlogVo {
 		this.title = title;
 	}
 	public String getLogo() {
-		return logo;
+		return logoUrl;
 	}
 	public void setLogo(String logo) {
-		this.logo = logo;
+		this.logoUrl = logo;
 	}
 	@Override
 	public String toString() {
-		return "BlogVo [id=" + id + ", title=" + title + ", logo=" + logo + "]";
+		return "BlogVo [id=" + id + ", title=" + title + ", logo=" + logoUrl + "]";
 	}
 	
 	

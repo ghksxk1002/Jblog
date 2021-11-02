@@ -11,8 +11,7 @@ import java.lang.annotation.Target;
 // 종속기간
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Auth {
-	
-	public String role() default "id";
+	public String role() default "HOST";
 //	public String value() default "USER";
 //	public boolean test() default false;
 }

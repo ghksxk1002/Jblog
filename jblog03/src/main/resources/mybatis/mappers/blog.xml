@@ -5,8 +5,16 @@
 	
 	<insert id="insertId" parameterType="blogvo">
 		<![CDATA[
-		insert into blog values(#{id}, '안녕하세요', '/images/spring-logo.jpg')
+		insert into blog values(#{id}, '안녕하세요', '/assets/images/spring-logo.jpg')
 		]]>	
 	</insert>
+	
+	<select id="getBlog" parameterType="string" resultType="blogvo">
+		<![CDATA[
+		select id, title, logo
+ 		  from blog
+ 		 where id = #{id}
+		]]>	
+	</select>
 
 </mapper>
