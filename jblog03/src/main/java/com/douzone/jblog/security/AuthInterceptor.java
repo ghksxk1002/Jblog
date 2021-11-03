@@ -44,12 +44,12 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		// 6. 인증체크 : @Auth가 적용이 되어 있기 때문에 인증(Authenfication) 여부 확인
 		HttpSession session = request.getSession();
 		if (session == null) {
-			response.sendRedirect(request.getContextPath() + "/user/login");
+			response.sendRedirect(request.getContextPath() + "/user");
 			return false;
 		}
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		if (authUser == null) {
-			response.sendRedirect(request.getContextPath() + "/user/login");
+			response.sendRedirect(request.getContextPath() + "/user");
 			return false;
 		}
 
@@ -57,11 +57,14 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		String role = auth.role();
 
 		// 8. @Auth의 role이 "USER" 인 경우, authUser의 role은 상관없다.
-		if ("GUEST".equals(role)) {
+		if ("USER".equals(role)) {
 			return true;
 		}
-		// 9.@Auth의 role이 "ADMIN" 인 경우, authUser의 role은 "ADMIN" 이어야 한다.
-		if ("ID".equals(authUser.getId()) == false) {
+		
+		String userId = request.getServletPath();
+		System.out.println("[userId]"+userId);
+		
+		if (userId.indexOf("/"+authUser.getId()+"/") == -1) {
 			response.sendRedirect(request.getContextPath());
 			return false;
 		}

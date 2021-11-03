@@ -22,6 +22,11 @@ public class BlogRepository {
 	public BlogVo getBlog(String id) {
 		return sqlSession.selectOne("blog.getBlog", id);
 	}
+
+	public boolean updateTitleAndImage(BlogVo blogVo) {
+		return 1 == sqlSession.update("blog.update", blogVo);
+	}
+
 	
 	
 }

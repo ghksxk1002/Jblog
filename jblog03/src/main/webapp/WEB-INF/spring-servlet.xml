@@ -34,9 +34,9 @@
 	 
 	 <!--interceptor  -->
 	<mvc:interceptors>
-		<!-- <mvc:interceptor>
-			<mvc:mapping path="/**"/>
-			<bean class="com.douzone.jblog.interceptor.SiteInterceptor" />
+		 <!-- <mvc:interceptor>
+			<mvc:mapping path="/blog/**"/>
+			<bean class="com.douzone.jblog.interceptor.BlogInterceptor" />
 		</mvc:interceptor> -->
 		<mvc:interceptor>
 			<mvc:mapping path="/user/auth"/>
@@ -47,7 +47,7 @@
 			<bean class="com.douzone.jblog.security.LogoutInterceptor" />
 		</mvc:interceptor>
 		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
+			<mvc:mapping path="/**/admin/**"/>
 			<mvc:exclude-mapping path="/user/auth"/>
 			<mvc:exclude-mapping path="/user/logout"/>
 			<mvc:exclude-mapping path="/assets/**"/>
@@ -80,10 +80,9 @@
 	</bean>
 		
 
-	<!-- mvc url-resource mapping 
-	<mvc:resources mapping="/gallery/images/**"	location="file:/upload-mysite/" />
-	<mvc:resources mapping="/images/**"	location="file:/upload-mysite/" />
-	-->
+	<!-- mvc url-resource mapping -->
+	<mvc:resources mapping="/images/**"	location="file:/upload-blog/" />
+	
 
 
 	<!-- validator, conversionService, messageConverter를 자동으로 등록 -->

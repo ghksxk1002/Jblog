@@ -14,7 +14,16 @@
 		select id, title, logo
  		  from blog
  		 where id = #{id}
-		]]>	
+ 		]]>
 	</select>
+	
+	<update id="update" parameterType="blogvo">
+		update blog 
+		set title=#{title} 
+		<if test="logo != null">
+			, logo=#{logo} 
+		</if>
+		where id=#{id}
+	</update>
 
 </mapper>
