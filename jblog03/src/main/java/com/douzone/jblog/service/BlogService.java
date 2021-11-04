@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,13 +13,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.douzone.jblog.exception.BlogServiceException;
 import com.douzone.jblog.repository.BlogRepository;
+import com.douzone.jblog.repository.CategoryRepository;
 import com.douzone.jblog.vo.BlogVo;
+import com.douzone.jblog.vo.CategoryVo;
 
 @Service
 public class BlogService {
 
-	private static String SAVE_PATH = "/upload-blog";
-	private static String URL_BASE = "/images";
+	private  String SAVE_PATH = "/upload-blog";
+	private  String URL_BASE = "/images";
+	
+	@Autowired
+	CategoryRepository categoryRepository;
 	
 	@Autowired
 	BlogRepository blogRepository;
@@ -81,6 +88,13 @@ public class BlogService {
 	public boolean update(BlogVo blogVo) {
 		return blogRepository.updateTitleAndImage(blogVo);
 	}
+
+	public List<CategoryVo> getCategory(String id) {
+		return categoryRepository.getCategory(id);
+	}
+	
+	// 관리 페이지에 카테고리 리스트 가져오기
+	
 	
 
 

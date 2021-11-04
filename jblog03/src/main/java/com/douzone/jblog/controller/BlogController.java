@@ -1,7 +1,8 @@
 package com.douzone.jblog.controller;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import com.douzone.jblog.security.Auth;
 import com.douzone.jblog.security.AuthUser;
 import com.douzone.jblog.service.BlogService;
 import com.douzone.jblog.vo.BlogVo;
+import com.douzone.jblog.vo.CategoryVo;
 import com.douzone.jblog.vo.UserVo;
 
 @Controller
@@ -42,8 +44,6 @@ public class BlogController {
 		BlogVo blogVo = (BlogVo) blogService.getBlog(blogId);
 
 		model.addAttribute("blogVo", blogVo);
-		System.out.println("[블로그메인으로 왔을때]" + blogVo);
-		System.out.println("[넘어온 blogId---]" + blogId);
 		
 		return "blog/blog-main";
 	}
@@ -55,7 +55,6 @@ public class BlogController {
 			@PathVariable("id") String id) {
 		
 		BlogVo blogVo = (BlogVo) blogService.getBlog(id);
-		System.out.println("[최초에 가져온 블로그 정보]" + blogVo);
 		model.addAttribute("blogVo", blogVo);
 		return "blog/blog-admin-basic";
 	}
@@ -90,21 +89,24 @@ public class BlogController {
 	
 	@Auth(role="ADMIN")
 	@RequestMapping("/admin/category")
-	public String category(@PathVariable("id") String id,Model model) {
+	public String category(
+			@AuthUser UserVo authUser,
+			Model model) {
 		
-		BlogVo blogVo = (BlogVo) blogService.getBlog(id);
+		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
 		model.addAttribute("blogVo", blogVo);
 		
+		List<CategoryVo> list = blogService.getCategory(authUser.getId());
+		model.addAttribute("list",list);
 		return "blog/blog-admin-category";
 	}
 	
 	@Auth(role="ADMIN")
 	@RequestMapping("/admin/write")
-	public String write(HttpSession session,Model model) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "redirect:/user";
-		}
+	public String write(
+			Model model,
+			@AuthUser UserVo authUser) {
+	
 		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
 		model.addAttribute("blogVo", blogVo);
 		
