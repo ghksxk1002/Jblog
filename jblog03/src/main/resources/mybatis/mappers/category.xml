@@ -8,10 +8,42 @@
 		]]>	
 	</insert>
 	
+	<insert id="insertCg" parameterType="categoryvo">
+		<![CDATA[
+		insert into category values(null, #{name}, #{desc}, #{blogId});
+		]]>	
+	</insert>
+	
 	<select id="getCategory" parameterType="string" resultType="categoryvo">
 	<![CDATA[
-	select name, `desc` from category where blog_id=#{blogId}
+	select c.no, c.name, c.desc, ifnull((b.cnt) , '0') as count
+   	  from category c left join (select category_no ,count(*) as cnt
+								   from post
+							   group by category_no) b 
+	    on c.no = b.category_no
+     where c.blog_id = #{blogId}
+	]]>
+	</select>
+	
+	<select id="getLenght" parameterType="string" resultType="long">
+	<![CDATA[
+	select count(*) from category where blog_id=#{id}
 	]]>	
 	</select>
+	
+	<select id="count" parameterType="long" resultType="long">
+	<![CDATA[
+	select count(*) 
+ 	  from post as p, category as c
+     where p.category_no = c.no
+       and c.no = #{no}
+	]]>	
+	</select>
+	
+	<delete id="delete" parameterType="string">
+	<![CDATA[
+	delete from category where no=#{no};
+	]]>	
+	</delete>
 	
 </mapper>

@@ -24,5 +24,21 @@ public class CategoryRepository {
 	public List<CategoryVo> getCategory(String id) {
 		return sqlSession.selectList("category.getCategory", id);
 	}
+
+	public boolean MakeCategory(CategoryVo categoryVo) {
+		return 1 == sqlSession.insert("category.insertCg", categoryVo);
+	}
+
+	public Long getLength(String id) {
+		return sqlSession.selectOne("category.getLenght", id);
+	}
+
+	public Long count(Long no) {
+		return sqlSession.selectOne("category.count", no);
+	}
+
+	public boolean delete(String no) {
+		return 1 == sqlSession.delete("category.delete", no);
+	}
 	
 }

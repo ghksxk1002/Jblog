@@ -19,6 +19,7 @@ import com.douzone.jblog.security.AuthUser;
 import com.douzone.jblog.service.BlogService;
 import com.douzone.jblog.vo.BlogVo;
 import com.douzone.jblog.vo.CategoryVo;
+import com.douzone.jblog.vo.PostVo;
 import com.douzone.jblog.vo.UserVo;
 
 @Controller
@@ -48,17 +49,20 @@ public class BlogController {
 		return "blog/blog-main";
 	}
 	
+	// 블로그 관리 기본설정 페이지 처리
 	@Auth(role="ADMIN")
 	@RequestMapping("/admin/basic")
 	public String admin(
 			Model model,
 			@PathVariable("id") String id) {
 		
+		// url로 넘어온 아이디로 블로그 타이틀 로고 아이디 가져오기
 		BlogVo blogVo = (BlogVo) blogService.getBlog(id);
 		model.addAttribute("blogVo", blogVo);
 		return "blog/blog-admin-basic";
 	}
 	
+	// 블로그 로고, 타이틀 수정
 	@Auth(role="ADMIN")
 	@RequestMapping(value = "/admin/update", method = RequestMethod.POST)
 	public String update(
@@ -84,33 +88,96 @@ public class BlogController {
 		servletContext.setAttribute("blogVo", blogVo);
 
 		// 수정한 블로그 아이디로 리다이텍트
-		return "redirect:/" + authUser.getId();
+		return "redirect:/" + authUser.getId()+"/admin/basic";
 	}
 	
+	// 카테고리 삭제 
+	// 미분류는 삭제 안되게 처리 --> 뷰에서 처리 했음(다른 방법없는지 생각해보자)
+	@Auth(role="ADMIN")
+	@RequestMapping(value="/admin/category/delete/{no}", method = RequestMethod.GET)
+	public String delete(
+			@PathVariable("no") String no,
+			@AuthUser UserVo authUser) {
+		
+		blogService.delete(no);
+		
+		return "redirect:/" + authUser.getId()+"/admin/category";
+	}
+	
+	// 카테고리 불러오기
 	@Auth(role="ADMIN")
 	@RequestMapping("/admin/category")
 	public String category(
+			CategoryVo categoryVo,
 			@AuthUser UserVo authUser,
 			Model model) {
 		
+		/*다끝나면 이 작업을 서비스로 옵겨보자*/
+		
+		// 카테고리 갯수 구해오기
+		Long countCg = blogService.getCgLength(authUser.getId());
+		model.addAttribute("countCg",countCg);
+		
+		// 블로그 정보 타이틀 그림 블로그 아이디 가져와서 세팅 넘겨주기 --> 나중에 서블릿 컨테스트에 담아서 처리해보자
 		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
 		model.addAttribute("blogVo", blogVo);
 		
+		// 리스트에 카테고리 no, name, 카테고리 안의 post 수, 설명 담아서 가져오기
 		List<CategoryVo> list = blogService.getCategory(authUser.getId());
 		model.addAttribute("list",list);
 		return "blog/blog-admin-category";
 	}
 	
+	// 카테고리 추가 --> 카테고리 수정도 생각해보기
+	@RequestMapping(value="/admin/category", method = RequestMethod.POST)
+	public String updateCategory(
+			Model model,
+			CategoryVo categoryVo,
+			@AuthUser UserVo authUser,
+			@RequestParam("name") String name,
+			@RequestParam("desc") String desc) {
+		
+		// 넘오온 정보 뽑아서 Vo에세팅
+		categoryVo.setName(name);
+		categoryVo.setDesc(desc);
+		categoryVo.setBlogId(authUser.getId());
+		
+		// categoryVo 넘겨서 insert처리
+		blogService.insertCategory(categoryVo);
+		
+		return "redirect:/" + authUser.getId()+"/admin/category";
+	}
+	
 	@Auth(role="ADMIN")
 	@RequestMapping("/admin/write")
 	public String write(
+			PostVo postVo,
 			Model model,
 			@AuthUser UserVo authUser) {
-	
+		// 블로그 타이틀 로고 넘겨줌
 		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
 		model.addAttribute("blogVo", blogVo);
 		
+		// 카테고리 선택할 리스트 가져오지
+		
+		
+		
 		return "blog/blog-admin-write";
+	}
+	
+	@Auth(role="ADMIN")
+	@RequestMapping(value="/admin/write", method = RequestMethod.POST)
+	public String write(
+			Model model,
+			@AuthUser UserVo authUser,
+			@RequestParam("title") String title,
+			@RequestParam("content") String content) {
+
+		// 블로그 타이틀 로고 넘겨줌
+		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
+		model.addAttribute("blogVo", blogVo);
+		
+		return "redirect/blog";
 	}
 
 }

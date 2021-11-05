@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,10 +91,20 @@ public class BlogService {
 	public List<CategoryVo> getCategory(String id) {
 		return categoryRepository.getCategory(id);
 	}
-	
-	// 관리 페이지에 카테고리 리스트 가져오기
-	
-	
 
+	public void insertCategory(CategoryVo categoryVo) {
+		categoryRepository.MakeCategory(categoryVo);
+	}
 
+	public Long getCgLength(String id) {
+		return categoryRepository.getLength(id);
+	}
+
+	public Long countPost(Long no) {
+		return categoryRepository.count(no);
+	}
+
+	public boolean delete(String no) {
+		return categoryRepository.delete(no);
+	}
 }

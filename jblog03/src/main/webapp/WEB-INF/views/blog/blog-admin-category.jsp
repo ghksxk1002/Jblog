@@ -27,32 +27,40 @@
 		      			<th>설명</th>
 		      			<th>삭제</th>      			
 		      		</tr>
+		      		<c:set var='count' value='${countCg }' />
 					<c:forEach items='${list}' var='vo' varStatus="status">
 					<tr>
-						<td>3</td>
+						<td>${countCg-status.index }</td>
 						<td>${vo.name }</td>
-						<td>10</td>
+						<td>${vo.count }</td>
 						<td>${vo.desc }</td>
-						<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
+						<td>
+							<c:if test="${vo.name ne '미분류' }">
+								<a href="${pageContext.servletContext.contextPath }/${authUser.id }/admin/category/delete/${vo.no}" class="delete">
+								<img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></a>
+							</c:if>
+						</td>
 					</tr>  					  
 					</c:forEach>
 				</table>
       	
       			<h4 class="n-c">새로운 카테고리 추가</h4>
-		      	<table id="admin-cat-add">
-		      		<tr>
-		      			<td class="t">카테고리명</td>
-		      			<td><input type="text" name="name"></td>
-		      		</tr>
-		      		<tr>
-		      			<td class="t">설명</td>
-		      			<td><input type="text" name="desc"></td>
-		      		</tr>
-		      		<tr>
-		      			<td class="s">&nbsp;</td>
-		      			<td><input type="submit" value="카테고리 추가"></td>
-		      		</tr>      		      		
-		      	</table> 
+      			<form action="${pageContext.request.contextPath}/${authUser.id }/admin/category" method="post">
+			      	<table id="admin-cat-add">
+			      		<tr>
+			      			<td class="t">카테고리명</td>
+			      			<td><input type="text" name="name"></td>
+			      		</tr>
+			      		<tr>
+			      			<td class="t">설명</td>
+			      			<td><input type="text" name="desc"></td>
+			      		</tr>
+			      		<tr>
+			      			<td class="s">&nbsp;</td>
+			      			<td><input type="submit" value="카테고리 추가"></td>
+			      		</tr>      		      		
+			      	</table> 
+		      	</form>
 			</div>
 		</div>
 	<c:import url="/WEB-INF/views/includes/footer-blog.jsp"/>
