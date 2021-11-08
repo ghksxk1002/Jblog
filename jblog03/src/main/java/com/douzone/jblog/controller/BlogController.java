@@ -7,6 +7,7 @@ import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -132,14 +133,10 @@ public class BlogController {
 	@RequestMapping(value="/admin/category", method = RequestMethod.POST)
 	public String updateCategory(
 			Model model,
-			CategoryVo categoryVo,
 			@AuthUser UserVo authUser,
-			@RequestParam("name") String name,
-			@RequestParam("desc") String desc) {
+			@ModelAttribute CategoryVo categoryVo){
 		
 		// 넘오온 정보 뽑아서 Vo에세팅
-		categoryVo.setName(name);
-		categoryVo.setDesc(desc);
 		categoryVo.setBlogId(authUser.getId());
 		
 		// categoryVo 넘겨서 insert처리
@@ -148,36 +145,47 @@ public class BlogController {
 		return "redirect:/" + authUser.getId()+"/admin/category";
 	}
 	
+	// 포스트 쓰는 뷰로가기
 	@Auth(role="ADMIN")
 	@RequestMapping("/admin/write")
 	public String write(
-			PostVo postVo,
 			Model model,
 			@AuthUser UserVo authUser) {
 		// 블로그 타이틀 로고 넘겨줌
 		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
 		model.addAttribute("blogVo", blogVo);
 		
-		// 카테고리 선택할 리스트 가져오지
-		
+		// 카테고리 이름 가져오지
+		List<CategoryVo> list = blogService.getCategory(authUser.getId());
+		model.addAttribute("list",list);
 		
 		
 		return "blog/blog-admin-write";
 	}
 	
+	// 포스트 추가하기
 	@Auth(role="ADMIN")
 	@RequestMapping(value="/admin/write", method = RequestMethod.POST)
 	public String write(
 			Model model,
 			@AuthUser UserVo authUser,
-			@RequestParam("title") String title,
-			@RequestParam("content") String content) {
+			@ModelAttribute PostVo postVo) {
 
 		// 블로그 타이틀 로고 넘겨줌
 		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
 		model.addAttribute("blogVo", blogVo);
 		
-		return "redirect/blog";
+		System.out.println("[바인딩된 postVo]"+postVo);
+		
+		// 선택된 카테고리 이름으로 카테고리 넘버가져오기
+		// PostVo - title, contents, categoryNo(no를 넘겨주면 name은 넘겨줄 필요x)
+		// - <select>는 <option>카테고리 이름</option> 한다고 해서 이름을 넘기는 것이 아니라 <option value=''> value 값을 넘겨주는 것임
+		// - 그럼 value의 값을 categoryNo로 설정하면 되겠죵
+		// blogId(authUser의 id; 블로그 글쓰기는 admin(인증된 사용자)만 가능하니까) 넘겨줌
+		// 포스트 에드하기
+		blogService.addPost(postVo);
+		
+		return "redirect:/"+authUser.getId();
 	}
 
 }

@@ -40,5 +40,6 @@ public class CategoryRepository {
 	public boolean delete(String no) {
 		return 1 == sqlSession.delete("category.delete", no);
 	}
+
 	
 }

@@ -3,4 +3,22 @@
 
 <mapper namespace="post">
 
+	<select id="getName" parameterType="string" resultType="postvo">
+	<![CDATA[
+		select name from category where blog_id=#{id }
+	]]>	
+	</select>
+
+	<select id="getNo" parameterType="map" resultType="postvo">
+	<![CDATA[
+		select no as categoryNo from category where name=#{categoryName} and blog_id=#{blogId}
+	]]>
+	</select>
+	
+	<insert id="addPost" parameterType="postvo">
+	<![CDATA[
+		 insert into post values(null, #{title}, #{contents},  now(),  #{categoryNo});
+	]]>	
+	</insert>
+
 </mapper>

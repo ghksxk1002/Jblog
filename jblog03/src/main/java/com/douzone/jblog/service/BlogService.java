@@ -13,14 +13,19 @@ import org.springframework.web.multipart.MultipartFile;
 import com.douzone.jblog.exception.BlogServiceException;
 import com.douzone.jblog.repository.BlogRepository;
 import com.douzone.jblog.repository.CategoryRepository;
+import com.douzone.jblog.repository.PostRepository;
 import com.douzone.jblog.vo.BlogVo;
 import com.douzone.jblog.vo.CategoryVo;
+import com.douzone.jblog.vo.PostVo;
 
 @Service
 public class BlogService {
 
 	private  String SAVE_PATH = "/upload-blog";
 	private  String URL_BASE = "/images";
+	
+	@Autowired
+	PostRepository postRepository;
 	
 	@Autowired
 	CategoryRepository categoryRepository;
@@ -106,5 +111,14 @@ public class BlogService {
 
 	public boolean delete(String no) {
 		return categoryRepository.delete(no);
+	}
+
+	
+	public PostVo getName(String id) {
+		return postRepository.getName(id);
+	}
+
+	public boolean addPost(PostVo postVo) {
+		return postRepository.addPost(postVo);
 	}
 }
