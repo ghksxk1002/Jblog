@@ -11,15 +11,46 @@
 	
 	<select id="getPost" parameterType="long" resultType="postvo">
 	<![CDATA[
-		select no, title, contents, reg_date as regDate, category_no as categoryNo
-  	      from post
-         where category_no=#{categoryNo}
+		SELECT no, title, contents, reg_date as regDate, category_no as categoryNo
+  	      FROM post
+         WHERE category_no=#{categoryNo}
+       ORDER BY reg_date desc
+	]]>	
+	</select>
+	
+	<select id="selectFirstPost" parameterType="long" resultType="postvo">
+	<![CDATA[
+		SELECT title, contents
+  		  FROM post as p, category as c
+ 		 WHERE p.category_no = c.no
+  		   AND c.blog_id = #{blogId}
+  	   ORDER BY reg_date desc
+	     LIMIT 0, 1;
+	]]>	
+	</select>
+	
+	<select id="selectPostList" parameterType="string" resultType="postvo">
+	<![CDATA[
+		select p.no as no, p.title as title, p.contents as contents, p.reg_date as regDate, p.category_no as categoryNo
+ 		  from category as c, post as p
+ 	     where c.no = p.category_no 
+   		   and blog_id = #{blogId}
+  		   and name = '미분류'
+   	  order by p.reg_date desc
 	]]>	
 	</select>
 
 	<select id="getNo" parameterType="map" resultType="postvo">
 	<![CDATA[
 		select no as categoryNo from category where name=#{categoryName} and blog_id=#{blogId}
+	]]>
+	</select>
+	
+	<select id="selectPost" parameterType="long" resultType="postvo">
+	<![CDATA[
+		SELECT title, contents, category_no as categoryNo
+	      FROM post
+	     WHERE no =#{no}
 	]]>
 	</select>
 	

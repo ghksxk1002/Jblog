@@ -25,4 +25,17 @@ public class PostRepository {
 	public List<PostVo> getPost(Long categoryNo) {
 		return sqlSession.selectList("post.getPost",categoryNo);
 	}
+	
+	public PostVo getFirstPost(String blogId) {
+		return sqlSession.selectOne("post.selectFirstPost", blogId);
+	}
+
+	public PostVo selectPost(Long postNo) {
+		return sqlSession.selectOne("post.selectPost", postNo);
+	}
+
+	public List<PostVo> getFirstPostList(String blogId) {
+		return sqlSession.selectList("post.selectPostList", blogId);
+	}
+
 }

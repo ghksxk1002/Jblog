@@ -49,6 +49,7 @@ public class BlogService {
 		}
 
 		// 만약 파일안에 이미지가 없다면 비어있다면 익셉션 드로우
+		// 이미지에 관련된 문제가 뜨면 이걸 봐라 종윤이형이 말한
 		if (multipartFile.isEmpty()) {
 			throw new BlogServiceException("file upload error : image empty");
 		}
@@ -91,25 +92,38 @@ public class BlogService {
 		return fileName;
 	}
 	
-	public Map<String, Object> getBlogAll(String blogId, Long categoryNo, Long postNo) {
-		
-		//처리한값들 map에 담아서 return
-		Map<String, Object> map = new HashMap<String, Object>();
+	public Map<String, Object> getBlogAll(Map<String, Object> map) {
 		
 		// 카테고리 리스트 가져오기
-		List<CategoryVo> list = categoryRepository.getCategory(blogId);
-		System.out.println(list);
+		List<CategoryVo> list = categoryRepository.getCategory((String)map.get("blogId"));
 		
-		// 카테고리번호가 넘어오면 그 카테고리의 포스트리스트 보여주기
-		if(categoryNo != null || postNo != null) {
-			List<PostVo> postList = postRepository.getPost(categoryNo);
-			map.put("postList", postList);
+		Map<String, Object> mapper = new HashMap<String, Object>();
 		
+		if(map.get("categoryNo") != null) {
+			
+			List<PostVo> postList = postRepository.getPost((Long)map.get("categoryNo"));
+			mapper.put("postList", postList);
+			
+		} else {
+			
+			List<PostVo> postList = postRepository.getFirstPostList((String)map.get("blogId"));
+			System.out.println("post"+postList);
+			mapper.put("postList", postList);
+			
 		}
 		
-		map.put("list",list);
+		if (map.get("postNo") != null) {
+			PostVo postVo = postRepository.selectPost((Long)map.get("postNo"));
+			mapper.put("postVo", postVo);
+			
+		} else {
+			
+			PostVo postVo = postRepository.getFirstPost((String)map.get("blogId"));
+			mapper.put("postVo", postVo);
+		}
 		
-		return map;
+		mapper.put("list",list);		
+		return mapper;
 	}
 
 	// 카테고리 정보 찾아오는 서비스(카테고리No, 카테고리 이름, 포스트수, 블로그Id)
