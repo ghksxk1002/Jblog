@@ -1,6 +1,7 @@
 package com.douzone.jblog.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -35,17 +36,22 @@ public class BlogController {
 
 	// 얘는보안체크해야됨
 	@RequestMapping({"", "/{categoryNo}","/{categroyNo}/{postNo}"})
-//	@RequestMapping({""})
 	public String index(
 			Model model,
-//			@PathVariable("id") String blogId) {
 			@PathVariable("id") String blogId,
-			@PathVariable(value = "categoryNo", required = false) String categoryNo,
-			@PathVariable(value = "postNo", required = false) String postNo) {
+			@PathVariable(value = "categoryNo", required = false) Long categoryNo,
+			@PathVariable(value = "postNo", required = false) Long postNo) {
 		
+		// 블로그 메인 화면의 타이틀, 로고 가져와서 넘겨줌
 		BlogVo blogVo = (BlogVo) blogService.getBlog(blogId);
-
 		model.addAttribute("blogVo", blogVo);
+		System.out.println(blogVo);
+		
+		// map에 url로 넘어온 카테고리 번호, 포스트 번호, 블로그 아이디 넘겨서
+		// 카테고리 리스트, 포스트 리스트 가져옥;
+		Map<String, Object> map = blogService.getBlogAll(blogId, categoryNo, postNo);
+		
+		model.addAttribute("map",map);
 		
 		return "blog/blog-main";
 	}
@@ -130,6 +136,7 @@ public class BlogController {
 	}
 	
 	// 카테고리 추가 --> 카테고리 수정도 생각해보기
+	@Auth(role="ADMIN")
 	@RequestMapping(value="/admin/category", method = RequestMethod.POST)
 	public String updateCategory(
 			Model model,

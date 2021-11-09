@@ -13,6 +13,6 @@
 					<li><a href="${pageContext.request.contextPath}/user/logout">로그아웃</a></li>
 					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/basic">블로그 관리</a></li>
 				</c:if>
-
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}">내 블로그로 가기</a></li>
 			</ul>
 		</div>

@@ -16,7 +16,7 @@
 	
 	<select id="getCategory" parameterType="string" resultType="categoryvo">
 	<![CDATA[
-	select c.no, c.name, c.desc, ifnull((b.cnt) , '0') as count
+	select c.no, c.name, c.desc, ifnull((b.cnt) , '0') as count, c.blog_id as blogId
    	  from category c left join (select category_no ,count(*) as cnt
 								   from post
 							   group by category_no) b 

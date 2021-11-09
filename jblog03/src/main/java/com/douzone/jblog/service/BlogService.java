@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,15 +90,42 @@ public class BlogService {
 		fileName += ("." + extName);
 		return fileName;
 	}
-
-	public boolean update(BlogVo blogVo) {
-		return blogRepository.updateTitleAndImage(blogVo);
+	
+	public Map<String, Object> getBlogAll(String blogId, Long categoryNo, Long postNo) {
+		
+		//처리한값들 map에 담아서 return
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		// 카테고리 리스트 가져오기
+		List<CategoryVo> list = categoryRepository.getCategory(blogId);
+		System.out.println(list);
+		
+		// 카테고리번호가 넘어오면 그 카테고리의 포스트리스트 보여주기
+		if(categoryNo != null || postNo != null) {
+			List<PostVo> postList = postRepository.getPost(categoryNo);
+			map.put("postList", postList);
+		
+		}
+		
+		map.put("list",list);
+		
+		return map;
 	}
 
+	// 카테고리 정보 찾아오는 서비스(카테고리No, 카테고리 이름, 포스트수, 블로그Id)
 	public List<CategoryVo> getCategory(String id) {
 		return categoryRepository.getCategory(id);
 	}
-
+	
+	// 포스트가져오기 (포스트번호, 타이틀, 내용, 작성일자, 카테고리 번호)
+	public List<PostVo> getPost(Long categoryNo) {
+		return postRepository.getPost(categoryNo);
+	}
+	
+	public boolean update(BlogVo blogVo) {
+		return blogRepository.updateTitleAndImage(blogVo);
+	}
+		
 	public void insertCategory(CategoryVo categoryVo) {
 		categoryRepository.MakeCategory(categoryVo);
 	}

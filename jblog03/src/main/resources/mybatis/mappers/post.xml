@@ -8,6 +8,14 @@
 		select name from category where blog_id=#{id }
 	]]>	
 	</select>
+	
+	<select id="getPost" parameterType="long" resultType="postvo">
+	<![CDATA[
+		select no, title, contents, reg_date as regDate, category_no as categoryNo
+  	      from post
+         where category_no=#{categoryNo}
+	]]>	
+	</select>
 
 	<select id="getNo" parameterType="map" resultType="postvo">
 	<![CDATA[
