@@ -21,7 +21,7 @@ public class BlogInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		BlogVo blogVo = (BlogVo)request.getServletContext().getAttribute("blogVo");
 		if(blogVo == null) {
-			blogVo = blogService.getBlog(blogVo.getId());
+			blogVo = blogService.getBlog(request.getServletPath());
 			request.getServletContext().setAttribute("blogVo", blogVo);
 		}
 

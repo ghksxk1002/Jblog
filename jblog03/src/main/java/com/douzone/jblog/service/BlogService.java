@@ -107,7 +107,6 @@ public class BlogService {
 		} else {
 			
 			List<PostVo> postList = postRepository.getFirstPostList((String)map.get("blogId"));
-			System.out.println("post"+postList);
 			mapper.put("postList", postList);
 			
 		}

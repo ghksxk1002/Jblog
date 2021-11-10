@@ -37,6 +37,7 @@ public class BlogController {
 	BlogService blogService;
 
 	// 얘는보안체크해야됨
+	@Auth
 	@RequestMapping({ "", "/{categoryNo}", "/{categoryNo}/{postNo}" })
 	public String index(Model model, @PathVariable("id") String blogId,
 			@PathVariable("categoryNo") Optional<Long> categoryNo, @PathVariable("postNo") Optional<Long> postNo) {
@@ -70,6 +71,7 @@ public class BlogController {
 		// url로 넘어온 아이디로 블로그 타이틀 로고 아이디 가져오기
 		BlogVo blogVo = (BlogVo) blogService.getBlog(id);
 		model.addAttribute("blogVo", blogVo);
+		
 		return "blog/blog-admin-basic";
 	}
 

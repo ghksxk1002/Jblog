@@ -11,9 +11,7 @@
 </head>
 <body>
 	<h1>Exception Occurs</h1>
-	<pre style='color:red'>
-		${exception }
-	</pre>
+	<h2>잘못된 요청입니다</h2>
 	
 </body>
 </html>

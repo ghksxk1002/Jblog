@@ -62,8 +62,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		}
 		
 		String userId = request.getServletPath();
-		System.out.println("[userId]"+userId);
-		
+
 		if (userId.indexOf("/"+authUser.getId()+"/") == -1) {
 			response.sendRedirect(request.getContextPath());
 			return false;
