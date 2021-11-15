@@ -38,4 +38,8 @@ public class PostRepository {
 		return sqlSession.selectList("post.selectPostList", blogId);
 	}
 
+	public boolean deletePost(Long no) {
+		return 1 == sqlSession.delete("post.deletePost", no);
+	}
+
 }

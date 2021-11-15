@@ -20,8 +20,13 @@
 				</c:forEach>
 				</ul>
 				<div class="blog-content">
-					<h4>${map.postVo.title }</h4>
+					<h4>${map.postVo.title } -----${map.postVo.no}</h4>
 					<p>${map.postVo.contents }</p>
+					<c:if test="${authUser.id == blogVo.id}">
+					<br/>
+						<a href="${pageContext.servletContext.contextPath }/${authUser.id }/delete/${map.postVo.no}" class="delete">
+						<img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></a>
+					</c:if>
 				</div>
 			</div>
 		</div>

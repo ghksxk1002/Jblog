@@ -20,7 +20,7 @@
 	
 	<select id="selectFirstPost" parameterType="long" resultType="postvo">
 	<![CDATA[
-		SELECT title, contents
+		SELECT p.no, p.title, p.contents 
   		  FROM post as p, category as c
  		 WHERE p.category_no = c.no
   		   AND c.blog_id = #{blogId}
@@ -48,7 +48,7 @@
 	
 	<select id="selectPost" parameterType="long" resultType="postvo">
 	<![CDATA[
-		SELECT title, contents, category_no as categoryNo
+		SELECT no, title, contents, category_no as categoryNo
 	      FROM post
 	     WHERE no =#{no}
 	]]>
@@ -59,5 +59,11 @@
 		 insert into post values(null, #{title}, #{contents},  now(),  #{categoryNo});
 	]]>	
 	</insert>
+	
+	<delete id="deletePost" parameterType="long">
+	<![CDATA[
+		 delete from post where no =#{no}
+	]]>	
+	</delete>
 
 </mapper>

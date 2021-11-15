@@ -14,11 +14,16 @@
 	<div class="center-content">
 		<h1 class="logo" style="background:url(${pageContext.request.contextPath}/assets/images/logo.jpg) no-repeat 0 0">JBlog</h1>
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
-		<form class="login-form" action="${pageContext.request.contextPath}/user/auth">
-      		<label class="block-label">아이디</label> 
-      		<input type="text" name="id" value="">
-      		<label>패스워드</label> 
-      		<input type="text" name="password" value="">
+		<form class="login-form" method="post" action="${pageContext.request.contextPath}/user/auth">
+    		<label class="block-label">이메일</label>
+			<input id="id" name="id" type="text" value="">
+			<label class="block-label" >패스워드</label>
+			<input id="password" name="password" type="password" value="">
+			<c:if test="${result == 'fail' }">
+				<p>
+					로그인이 실패 했습니다.
+				</p>
+			</c:if>
       		<input type="submit" value="로그인">
 		</form>
 	</div>

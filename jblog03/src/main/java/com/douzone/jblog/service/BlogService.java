@@ -100,18 +100,20 @@ public class BlogService {
 		Map<String, Object> mapper = new HashMap<String, Object>();
 		
 		if(map.get("categoryNo") != null) {
-			
+			// 카테고리 넘버로 그 카테고리의 포스트 리스트 가져오기 (no, title, contents, regDate, cateforyNo)
 			List<PostVo> postList = postRepository.getPost((Long)map.get("categoryNo"));
 			mapper.put("postList", postList);
 			
 		} else {
-			
+			// url로 넘어온 카테고리 넘버가 없으면 가장 최근에 작성된 포스트 불러오기
 			List<PostVo> postList = postRepository.getFirstPostList((String)map.get("blogId"));
+			// mapper에 postlist로 넘기기 (title,contents)
 			mapper.put("postList", postList);
 			
 		}
 		
 		if (map.get("postNo") != null) {
+			// 넘오온 포스트 넘버로 해상 포스트 title contents 가져오기
 			PostVo postVo = postRepository.selectPost((Long)map.get("postNo"));
 			mapper.put("postVo", postVo);
 			
@@ -162,5 +164,9 @@ public class BlogService {
 
 	public boolean addPost(PostVo postVo) {
 		return postRepository.addPost(postVo);
+	}
+
+	public boolean deleteBlog(Long no) {
+		return postRepository.deletePost(no);
 	}
 }

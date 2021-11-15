@@ -39,26 +39,40 @@ public class BlogController {
 	// 얘는보안체크해야됨
 	@Auth
 	@RequestMapping({ "", "/{categoryNo}", "/{categoryNo}/{postNo}" })
-	public String index(Model model, @PathVariable("id") String blogId,
-			@PathVariable("categoryNo") Optional<Long> categoryNo, @PathVariable("postNo") Optional<Long> postNo) {
+	public String index(
+			Model model, 
+			@PathVariable("id") String blogId,
+			@PathVariable("categoryNo") Optional<Long> categoryNo,
+			@PathVariable("postNo") Optional<Long> postNo) {
 
 		// 블로그 메인 화면의 타이틀, 로고 가져와서 넘겨줌
 		BlogVo blogVo = (BlogVo) blogService.getBlog(blogId);
 		model.addAttribute("blogVo", blogVo);
 
+		// map에 담자주기 위해 mapper 선언
 		Map<String, Object> mapper = new HashMap<String, Object>();
+		// url로 넘어온 id
 		mapper.put("blogId", blogId);
 
 		if (categoryNo.isPresent()) {
+			// url로 카테고리 넘버
 			mapper.put("categoryNo", categoryNo.get());
 		}
 
 		if (postNo.isPresent()) {
+			// url로 넘어온 포스트 넘버
 			mapper.put("postNo", postNo.get());
 		}
+		// mapper blog 서비스로 넘겨서 처리
 		Map<String, Object> map = blogService.getBlogAll(mapper);
-
+		
+		System.out.println(map);
+		// map 뷰로 응답
 		model.addAttribute("map", map);
+		
+		if(blogVo==null) {
+			return "redirect:/";
+		}
 
 		return "blog/blog-main";
 	}
@@ -66,7 +80,9 @@ public class BlogController {
 	// 블로그 관리 기본설정 페이지 처리
 	@Auth(role = "ADMIN")
 	@RequestMapping("/admin/basic")
-	public String admin(Model model, @PathVariable("id") String id) {
+	public String admin(
+			Model model, 
+			@PathVariable("id") String id) {
 
 		// url로 넘어온 아이디로 블로그 타이틀 로고 아이디 가져오기
 		BlogVo blogVo = (BlogVo) blogService.getBlog(id);
@@ -78,7 +94,10 @@ public class BlogController {
 	// 블로그 로고, 타이틀 수정
 	@Auth(role = "ADMIN")
 	@RequestMapping(value = "/admin/update", method = RequestMethod.POST)
-	public String update(BlogVo blogVo, @AuthUser UserVo authUser, @RequestParam("title") String title,
+	public String update(
+			BlogVo blogVo,
+			@AuthUser UserVo authUser, 
+			@RequestParam("title") String title,
 			@RequestParam("logo-file") MultipartFile multipartFile) {
 
 		// 이미지 url 받아오기
@@ -104,17 +123,33 @@ public class BlogController {
 	// 미분류는 삭제 안되게 처리 --> 뷰에서 처리 했음(다른 방법없는지 생각해보자)
 	@Auth(role = "ADMIN")
 	@RequestMapping(value = "/admin/category/delete/{no}", method = RequestMethod.GET)
-	public String delete(@PathVariable("no") String no, @AuthUser UserVo authUser) {
+	public String delete(
+			@PathVariable("no") String no,
+			@AuthUser UserVo authUser) {
 
 		blogService.delete(no);
 
 		return "redirect:/" + authUser.getId() + "/admin/category";
 	}
+	
+
+	// 포스트 지우기
+	@Auth(role = "ADMIN")
+	@RequestMapping("/delete/{no}")
+	public String delete(
+			@AuthUser UserVo authUser,
+			@PathVariable("no") Long no) {
+		blogService.deleteBlog(no);
+		return "redirect:/" + authUser.getId();
+	}
 
 	// 카테고리 불러오기
 	@Auth(role = "ADMIN")
 	@RequestMapping("/admin/category")
-	public String category(CategoryVo categoryVo, @AuthUser UserVo authUser, Model model) {
+	public String category(
+			CategoryVo categoryVo, 
+			@AuthUser UserVo authUser, 
+			Model model) {
 
 		/* 다끝나면 이 작업을 서비스로 옵겨보자 */
 
@@ -135,7 +170,10 @@ public class BlogController {
 	// 카테고리 추가 --> 카테고리 수정도 생각해보기
 	@Auth(role = "ADMIN")
 	@RequestMapping(value = "/admin/category", method = RequestMethod.POST)
-	public String updateCategory(Model model, @AuthUser UserVo authUser, @ModelAttribute CategoryVo categoryVo) {
+	public String updateCategory(
+			Model model,
+			@AuthUser UserVo authUser, 
+			@ModelAttribute CategoryVo categoryVo) {
 
 		// 넘오온 정보 뽑아서 Vo에세팅
 		categoryVo.setBlogId(authUser.getId());
@@ -149,7 +187,10 @@ public class BlogController {
 	// 포스트 쓰는 뷰로가기
 	@Auth(role = "ADMIN")
 	@RequestMapping("/admin/write")
-	public String write(Model model, @AuthUser UserVo authUser) {
+	public String write(
+			Model model, 
+			@AuthUser UserVo authUser) {
+		
 		// 블로그 타이틀 로고 넘겨줌
 		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
 		model.addAttribute("blogVo", blogVo);
@@ -164,21 +205,15 @@ public class BlogController {
 	// 포스트 추가하기
 	@Auth(role = "ADMIN")
 	@RequestMapping(value = "/admin/write", method = RequestMethod.POST)
-	public String write(Model model, @AuthUser UserVo authUser, @ModelAttribute PostVo postVo) {
+	public String write(
+			Model model, 
+			@AuthUser UserVo authUser, 
+			@ModelAttribute PostVo postVo) {
 
 		// 블로그 타이틀 로고 넘겨줌
 		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
 		model.addAttribute("blogVo", blogVo);
 
-		System.out.println("[바인딩된 postVo]" + postVo);
-
-		// 선택된 카테고리 이름으로 카테고리 넘버가져오기
-		// PostVo - title, contents, categoryNo(no를 넘겨주면 name은 넘겨줄 필요x)
-		// - <select>는 <option>카테고리 이름</option> 한다고 해서 이름을 넘기는 것이 아니라 <option value=''>
-		// value 값을 넘겨주는 것임
-		// - 그럼 value의 값을 categoryNo로 설정하면 되겠죵
-		// blogId(authUser의 id; 블로그 글쓰기는 admin(인증된 사용자)만 가능하니까) 넘겨줌
-		// 포스트 에드하기
 		blogService.addPost(postVo);
 
 		return "redirect:/" + authUser.getId();
