@@ -127,10 +127,19 @@ public class BlogService {
 		return mapper;
 	}
 
+	
+	
+	
 	// 카테고리 정보 찾아오는 서비스(카테고리No, 카테고리 이름, 포스트수, 블로그Id)
 	public List<CategoryVo> getCategory(String id) {
 		return categoryRepository.getCategory(id);
 	}
+	// 카테고리 API에서 사용하는 서비스
+	public CategoryVo getCategoryAPI(String name, String id) {
+		return categoryRepository.getCategoryAPI(name, id);
+	}
+	
+	
 	
 	// 포스트가져오기 (포스트번호, 타이틀, 내용, 작성일자, 카테고리 번호)
 	public List<PostVo> getPost(Long categoryNo) {
@@ -140,6 +149,7 @@ public class BlogService {
 	public boolean update(BlogVo blogVo) {
 		return blogRepository.updateTitleAndImage(blogVo);
 	}
+
 		
 	public void insertCategory(CategoryVo categoryVo) {
 		categoryRepository.MakeCategory(categoryVo);
@@ -169,4 +179,5 @@ public class BlogService {
 	public boolean deleteBlog(Long no) {
 		return postRepository.deletePost(no);
 	}
+
 }

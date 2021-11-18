@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.douzone.jblog.dto.JsonRrsult;
+import com.douzone.jblog.dto.JsonResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ControllerAdvice
@@ -43,7 +43,7 @@ public class GlobleExceptionHendler {
 		// application/json 이 문자열이 포함된
 		if(accept.matches(".*application/json.*")) {
 			//3. JSON 응답
-			JsonRrsult result = JsonRrsult.fail(errors.toString());
+			JsonResult result = JsonResult.fail(errors.toString());
 			// 젝슨라이브러리를 직덥 사용해서 제이슨 생성 
 			String jsonString = new ObjectMapper().writeValueAsString(result);
 		

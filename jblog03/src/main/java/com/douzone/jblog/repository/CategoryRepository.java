@@ -1,6 +1,8 @@
 package com.douzone.jblog.repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -20,9 +22,16 @@ public class CategoryRepository {
 	public boolean insertToCategory(@Valid UserVo vo) {
 		return 1 == sqlSession.insert("category.insert", vo);
 	}
-
-	public List<CategoryVo> getCategory(String id) {
-		return sqlSession.selectList("category.getCategory", id);
+	// 카테고리 불러오기
+	public List<CategoryVo> getCategory(String blogid) {
+		return sqlSession.selectList("category.getCategory", blogid);
+	}
+	// 카테고리 API
+	public CategoryVo getCategoryAPI(String name, String id) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("name", name);
+		map.put("blogid", id);
+		return sqlSession.selectOne("category.getCategoryAPI", map);
 	}
 
 	public boolean MakeCategory(CategoryVo categoryVo) {

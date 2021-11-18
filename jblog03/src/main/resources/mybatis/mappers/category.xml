@@ -14,6 +14,12 @@
 		]]>	
 	</insert>
 	
+	<select id="getCategoryAPI" parameterType="map" resultType="categoryvo">
+	<![CDATA[
+		select name from category where blog_id = #{blogid} and name=#{name}
+	]]>
+	</select>
+	
 	<select id="getCategory" parameterType="string" resultType="categoryvo">
 	<![CDATA[
 	select c.no, c.name, c.desc, ifnull((b.cnt) , '0') as count, c.blog_id as blogId
@@ -21,7 +27,7 @@
 								   from post
 							   group by category_no) b 
 	    on c.no = b.category_no
-     where c.blog_id = #{blogId}
+     where c.blog_id = #{blogid}
 	]]>
 	</select>
 	

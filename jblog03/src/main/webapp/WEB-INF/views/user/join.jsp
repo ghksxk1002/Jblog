@@ -72,7 +72,6 @@ $(function(){
 			<img id="img-check-id" style="display: none;" src="${pageContext.request.contextPath}/assets/images/check.png">
 			<p style="text-align:left; padding-left:0; color: #f00 "> 
 						<spring:hasBindErrors name="userVo">
-							<!-- name 이라는 필드에 에러가 있다면 오류내용 출력 -->
 							<c:if test="${errors.hasFieldErrors('id') }">
 								<spring:message code="${errors.getFieldError('id').codes[0] }" />
 							</c:if>

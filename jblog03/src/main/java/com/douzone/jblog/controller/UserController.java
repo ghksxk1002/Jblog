@@ -52,7 +52,7 @@ public class UserController {
 //			 String에 키값이 object에 에러내용
 //			 키로 멥핑되어있는 내용을 계속해서 model에 세팅을 계속해준다
 			model.addAllAttributes(result.getModel());
-			userService.join(vo);
+			// userService.join(vo);
 			// 에러가 있으면 조인으로 돌려야됨
 			return "user/join";
 		}

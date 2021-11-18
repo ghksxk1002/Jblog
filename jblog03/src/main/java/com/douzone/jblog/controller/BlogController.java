@@ -27,7 +27,7 @@ import com.douzone.jblog.vo.PostVo;
 import com.douzone.jblog.vo.UserVo;
 
 @Controller
-@RequestMapping("/{id:(?!assets|images).*}")
+@RequestMapping("/{id:(?!assets|images|ejs).*}")
 public class BlogController {
 
 	@Autowired
@@ -66,7 +66,6 @@ public class BlogController {
 		// mapper blog 서비스로 넘겨서 처리
 		Map<String, Object> map = blogService.getBlogAll(mapper);
 		
-		System.out.println(map);
 		// map 뷰로 응답
 		model.addAttribute("map", map);
 		
