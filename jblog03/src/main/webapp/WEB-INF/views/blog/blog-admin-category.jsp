@@ -11,7 +11,8 @@
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
 <script src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script> <!-- jQuery -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/ejs/ejs.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/ejs/ejs.js"></script> <!-- ejs -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> <!-- dialog -->
 </head>
 <script>
 // 새로 입력되는 카테고리 처리 템플릿
@@ -19,9 +20,9 @@ var listEJS = new EJS({
 	url : '${pageContext.request.contextPath}/ejs/list-temlate.ejs'
 });
 // 리스트 출력해주는 템플릿
-/* var listItemEJS = new EJS({
+var listItemEJS = new EJS({
 	url : '${pageContext.request.contextPath}/ejs/listItem-temlate.ejs'
-}); */
+});
 
 var messageBox = function(title, message, callback) {
 
@@ -59,15 +60,16 @@ var fetch = function() {
 };
 
 $(function(){
-	/* $("#add-form").submit(function(event) {
-		// 이름
-		event.preventDefault();
+	// 카테고리 추가
+	$("#add-category").click(function() {
+		
 		var vo = {};
-
-		vo.name = $('#input-name').val();
+		// id가 name인 엘리먼트의 입력된 카테고리 이름 가져오기
+		vo.name = $('#name').val();
+		console.log(vo.name);
 		if (!vo.name) {
 			messageBox('새카테고리작성', '카테고리명은 반드시 입력해야 합니다', function() {
-				$('#input-name').focus();
+				$('#name').focus();
 			});
 			return;
 		}
@@ -87,8 +89,8 @@ $(function(){
 
 				// var html = render(response.data);
 				var html = listItemEJS.render(response.data);
-				$('#list-guestbook').prepend(html);
-				$("#add-form")[0].reset();
+				$(".admin-cat tr.").prepend(html);
+				$(".admin-cat")[0].reset();
 
 			},
 			error : function(xhr, code, message) { // 통신 에러
@@ -97,7 +99,51 @@ $(function(){
 		});
 
 		console.log("ajax submit");
-	}); */
+	});
+	
+	// 삭제 다이알로그 객체 만들기
+	var dialogDelete = $('#dialog-delete-form')
+			.dialog({
+				autoOpen : false, // 바로 안뜨게 만들기
+				modal : true,
+				buttons : {
+					"삭제" : function() {
+						// 삭제 ajax 실행
+						var count = $('#count').val();
+						// 때ㅔ려야될 url
+						var url = '${pageContext.request.contextPath}/api/category/delete/' + count;
+
+							$.ajax({
+									url : url,
+									type : 'get',
+									dataType : 'json',
+									success : function(response) {
+										console.log(response)
+		
+										$('#list-guestbook li[data-no='+ response.data+ ']').remove();
+										$('#password-delete').val('');
+										$(".validateTips.error").hide();
+										dialogDelete.dialog('close');
+									}
+								});
+							},
+							"취소" : function() {
+								$('#password-delete').val('');
+								$(".validateTips.error").hide();
+								$(this).dialog("close");
+							}
+						}
+					});
+	// 글삭제 버튼	
+	$(document).on('click', '.admin-cat tr a', function(event) {
+		event.preventDefault();
+
+		var no = $(this).data('no');
+		console.log(no);
+		$("#hidden-no").val(no)
+
+		dialogDelete.dialog('open');
+	});
 	
 	fetch();
 });
@@ -136,14 +182,15 @@ $(function(){
 			      		</tr>
 			      		<tr>
 			      			<td class="s">&nbsp;</td>
-			      			<td><input id='addct' type="submit" value="카테고리 추가"></td>
+			      			<td><input id='add-category' type="submit" value="카테고리 추가"></td>
 			      		</tr>      		      		
 			      	</table> 
 		      
 			</div>
-			<div id="dialog-message" title="새글작성" style="display: none">
-				<p></p>
-			</div>
+			
+		</div>
+		<div id="dialog-message" title="새글작성" style="display: none">
+			<p></p>
 		</div>
 	<c:import url="/WEB-INF/views/includes/footer-blog.jsp"/>
 	</div>

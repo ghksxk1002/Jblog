@@ -1,8 +1,16 @@
-<li data-no='<%=no %>'>
-	<strong><%=name %></strong>
-	<p>
-		<%=message.replace(/\n/g, '<br/>')%>
-	</p> 
-	<strong></strong> 
-	<a href='' data-no='<%=no %>'>삭제</a>
-</li>
+<tr>
+	<td><%=data.length-i %></td>
+	<td><%=vo.name %></td>
+	<td><%=vo.count %></td>
+	<td><%=vo.desc %></td>
+	<td>
+		<% 
+			if(vo.name != '미분류') {
+		%>
+			<a href="/jblog03/<%=vo.blogId %>/admin/category/delete/<%=vo.no%>" class="delete">
+			<img src="/jblog03/assets/images/delete.jpg"></a>
+		<%
+			}
+		%>
+	</td>
+</tr> 
