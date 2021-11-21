@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,12 +36,27 @@ public class CategoryController {
 			@AuthUser UserVo authUser,
 			@RequestBody CategoryVo vo) {
 		
-		System.out.println(vo);
 		
 		vo.setBlogId(authUser.getId());
+		System.out.println(vo);
 		blogService.insertCategory(vo);
 		
 		return JsonResult.success(vo);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/delete/{no}")
+	public JsonResult delate(
+			@AuthUser UserVo authUser,
+			@PathVariable("no") Long no) {
+		
+		
+		//vo.setBlogId(authUser.getId());
+		System.out.println(no);
+		blogService.deletePost(no);
+		blogService.delete(no);
+		
+		return JsonResult.success(no);
 	}
 	
 }

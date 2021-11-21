@@ -65,5 +65,11 @@
 		 delete from post where no =#{no}
 	]]>	
 	</delete>
+	
+	<delete id="deleteAllPost" parameterType="long">
+	<![CDATA[
+		 delete from post where category_no =#{no}
+	]]>	
+	</delete>
 
 </mapper>

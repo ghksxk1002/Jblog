@@ -42,4 +42,8 @@ public class PostRepository {
 		return 1 == sqlSession.delete("post.deletePost", no);
 	}
 
+	public boolean deletAllPost(Long no) {
+		return 1 == sqlSession.delete("post.deleteAllPost", no);
+	}
+
 }

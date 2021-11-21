@@ -46,7 +46,7 @@ public class CategoryRepository {
 		return sqlSession.selectOne("category.count", no);
 	}
 
-	public boolean delete(String no) {
+	public boolean delete(Long no) {
 		return 1 == sqlSession.delete("category.delete", no);
 	}
 

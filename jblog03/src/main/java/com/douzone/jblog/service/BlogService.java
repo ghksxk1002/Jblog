@@ -163,7 +163,7 @@ public class BlogService {
 		return categoryRepository.count(no);
 	}
 
-	public boolean delete(String no) {
+	public boolean delete(Long no) {
 		return categoryRepository.delete(no);
 	}
 
@@ -178,6 +178,11 @@ public class BlogService {
 
 	public boolean deleteBlog(Long no) {
 		return postRepository.deletePost(no);
+	}
+
+	// 카테고리 삭제를 위해 카레고리 no로 해당 모든 포스트 지우기
+	public boolean deletePost(Long no) {
+		return postRepository.deletAllPost(no);
 	}
 
 }

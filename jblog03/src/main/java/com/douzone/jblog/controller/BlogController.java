@@ -154,33 +154,33 @@ public class BlogController {
 	
 	// 카테고리 삭제
 	// 미분류는 삭제 안되게 처리 --> 뷰에서 처리 했음(다른 방법없는지 생각해보자)
-	@Auth(role = "ADMIN")
-	@RequestMapping(value = "/admin/category/delete/{no}", method = RequestMethod.GET)
-	public String delete(
-			@PathVariable("no") String no,
-			@AuthUser UserVo authUser) {
-
-		blogService.delete(no);
-
-		return "redirect:/" + authUser.getId() + "/admin/category";
-	}
+//	@Auth(role = "ADMIN")
+//	@RequestMapping(value = "/admin/category/delete/{no}", method = RequestMethod.GET)
+//	public String delete(
+//			@PathVariable("no") String no,
+//			@AuthUser UserVo authUser) {
+//
+//		blogService.delete(no);
+//
+//		return "redirect:/" + authUser.getId() + "/admin/category";
+//	}
 	
-	// 카테고리 추가 --> 카테고리 수정도 생각해보기
-	@Auth(role = "ADMIN")
-	@RequestMapping(value = "/admin/category", method = RequestMethod.POST)
-	public String updateCategory(
-			Model model,
-			@AuthUser UserVo authUser, 
-			@ModelAttribute CategoryVo categoryVo) {
-
-		// 넘오온 정보 뽑아서 Vo에세팅
-		categoryVo.setBlogId(authUser.getId());
-
-		// categoryVo 넘겨서 insert처리
-		blogService.insertCategory(categoryVo);
-
-		return "redirect:/" + authUser.getId() + "/admin/category";
-	}
+//	// 카테고리 추가 --> 카테고리 수정도 생각해보기
+//	@Auth(role = "ADMIN")
+//	@RequestMapping(value = "/admin/category", method = RequestMethod.POST)
+//	public String updateCategory(
+//			Model model,
+//			@AuthUser UserVo authUser, 
+//			@ModelAttribute CategoryVo categoryVo) {
+//
+//		// 넘오온 정보 뽑아서 Vo에세팅
+//		categoryVo.setBlogId(authUser.getId());
+//
+//		// categoryVo 넘겨서 insert처리
+//		blogService.insertCategory(categoryVo);
+//
+//		return "redirect:/" + authUser.getId() + "/admin/category";
+//	}
 
 	// 포스트 쓰는 뷰로가기
 	@Auth(role = "ADMIN")
