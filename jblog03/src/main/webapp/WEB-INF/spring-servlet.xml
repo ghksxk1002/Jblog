@@ -36,6 +36,8 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/images/**"/>
+			<mvc:exclude-mapping path="/assets/**"/>
 			<bean class="com.douzone.jblog.interceptor.BlogInterceptor" />
 		</mvc:interceptor>
 		<mvc:interceptor>
@@ -47,7 +49,7 @@
 			<bean class="com.douzone.jblog.security.LogoutInterceptor" />
 		</mvc:interceptor>
 		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
+			<mvc:mapping path="/**/admin/**"/>
 			<mvc:exclude-mapping path="/user/auth"/>
 			<mvc:exclude-mapping path="/user/logout"/>
 			<mvc:exclude-mapping path="/assets/**"/>

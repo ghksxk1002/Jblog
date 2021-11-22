@@ -40,14 +40,15 @@ public class BlogController {
 	@Auth
 	@RequestMapping({ "", "/{categoryNo}", "/{categoryNo}/{postNo}" })
 	public String index(
+			@AuthUser UserVo authUser,
 			Model model, 
 			@PathVariable("id") String blogId,
 			@PathVariable("categoryNo") Optional<Long> categoryNo,
 			@PathVariable("postNo") Optional<Long> postNo) {
-
+		
 		// 블로그 메인 화면의 타이틀, 로고 가져와서 넘겨줌
 		BlogVo blogVo = (BlogVo) blogService.getBlog(blogId);
-		model.addAttribute("blogVo", blogVo);
+
 
 		// map에 담자주기 위해 mapper 선언
 		Map<String, Object> mapper = new HashMap<String, Object>();
@@ -84,8 +85,8 @@ public class BlogController {
 			@PathVariable("id") String id) {
 
 		// url로 넘어온 아이디로 블로그 타이틀 로고 아이디 가져오기
-		BlogVo blogVo = (BlogVo) blogService.getBlog(id);
-		model.addAttribute("blogVo", blogVo);
+//		BlogVo blogVo = (BlogVo) blogService.getBlog(id);
+//		model.addAttribute("blogVo", blogVo);
 		
 		return "blog/blog-admin-basic";
 	}
@@ -143,8 +144,8 @@ public class BlogController {
 		model.addAttribute("countCg", countCg);
 
 		// 블로그 정보 타이틀 그림 블로그 아이디 가져와서 세팅 넘겨주기 --> 나중에 서블릿 컨테스트에 담아서 처리해보자
-		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
-		model.addAttribute("blogVo", blogVo);
+//		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
+//		model.addAttribute("blogVo", blogVo);
 
 		// 리스트에 카테고리 no, name, 카테고리 안의 post 수, 설명 담아서 가져오기
 		List<CategoryVo> list = blogService.getCategory(authUser.getId());
@@ -190,8 +191,8 @@ public class BlogController {
 			@AuthUser UserVo authUser) {
 		
 		// 블로그 타이틀 로고 넘겨줌
-		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
-		model.addAttribute("blogVo", blogVo);
+//		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
+//		model.addAttribute("blogVo", blogVo);
 
 		// 카테고리 이름 가져오지
 		List<CategoryVo> list = blogService.getCategory(authUser.getId());
@@ -209,8 +210,8 @@ public class BlogController {
 			@ModelAttribute PostVo postVo) {
 
 		// 블로그 타이틀 로고 넘겨줌
-		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
-		model.addAttribute("blogVo", blogVo);
+//		BlogVo blogVo = (BlogVo) blogService.getBlog(authUser.getId());
+//		model.addAttribute("blogVo", blogVo);
 
 		blogService.addPost(postVo);
 
