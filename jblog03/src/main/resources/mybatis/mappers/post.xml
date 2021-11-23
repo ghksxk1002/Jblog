@@ -5,7 +5,7 @@
 
 	<select id="getName" parameterType="string" resultType="postvo">
 	<![CDATA[
-		select name from category where blog_id=#{id }
+		select name from category where blog_id=#{id}
 	]]>	
 	</select>
 	
@@ -46,7 +46,7 @@
 	]]>
 	</select>
 	
-	<select id="selectPost" parameterType="long" resultType="postvo">
+	<select id="selectPost" parameterType="string" resultType="postvo">
 	<![CDATA[
 		SELECT no, title, contents, category_no as categoryNo
 	      FROM post

@@ -46,9 +46,15 @@ public class BlogController {
 			@PathVariable("categoryNo") Optional<Long> categoryNo,
 			@PathVariable("postNo") Optional<Long> postNo) {
 		
+		
+		System.out.println(blogId);
+		
 		// 블로그 메인 화면의 타이틀, 로고 가져와서 넘겨줌
 		BlogVo blogVo = (BlogVo) blogService.getBlog(blogId);
 
+		if(blogVo==null) {
+			return "redirect:/";
+		}
 
 		// map에 담자주기 위해 mapper 선언
 		Map<String, Object> mapper = new HashMap<String, Object>();
@@ -70,9 +76,6 @@ public class BlogController {
 		// map 뷰로 응답
 		model.addAttribute("map", map);
 		
-		if(blogVo==null) {
-			return "redirect:/";
-		}
 
 		return "blog/blog-main";
 	}

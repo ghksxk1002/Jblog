@@ -105,20 +105,20 @@ public class BlogService {
 			mapper.put("postList", postList);
 			
 		} else {
-			// url로 넘어온 카테고리 넘버가 없으면 가장 최근에 작성된 포스트 불러오기
+			
 			List<PostVo> postList = postRepository.getFirstPostList((String)map.get("blogId"));
 			// mapper에 postlist로 넘기기 (title,contents)
 			mapper.put("postList", postList);
 			
 		}
-		
+		// 저는 천재입니다 막창도 좋아하고 막차도 너무 좋아해용 ㅜㅜ ^^*
 		if (map.get("postNo") != null) {
 			// 넘오온 포스트 넘버로 해상 포스트 title contents 가져오기
 			PostVo postVo = postRepository.selectPost((Long)map.get("postNo"));
 			mapper.put("postVo", postVo);
 			
 		} else {
-			
+			// url로 넘어온 카테고리 넘버가 없으면 가장 최근에 작성된 포스트 불러오기
 			PostVo postVo = postRepository.getFirstPost((String)map.get("blogId"));
 			mapper.put("postVo", postVo);
 		}
