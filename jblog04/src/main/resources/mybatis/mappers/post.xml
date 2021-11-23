@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="post">
+
+	<select id="getName" parameterType="string" resultType="postvo">
+	<![CDATA[
+		select name from category where blog_id=#{id}
+	]]>	
+	</select>
+	
+	<select id="getPost" parameterType="long" resultType="postvo">
+	<![CDATA[
+		SELECT no, title, contents, reg_date as regDate, category_no as categoryNo
+  	      FROM post
+         WHERE category_no=#{categoryNo}
+       ORDER BY reg_date desc
+	]]>	
+	</select>
+	
+	<select id="selectFirstPost" parameterType="long" resultType="postvo">
+	<![CDATA[
+		SELECT p.no, p.title, p.contents 
+  		  FROM post as p, category as c
+ 		 WHERE p.category_no = c.no
+  		   AND c.blog_id = #{blogId}
+  	   ORDER BY reg_date desc
+	     LIMIT 0, 1;
+	]]>	
+	</select>
+	
+	<select id="selectPostList" parameterType="string" resultType="postvo">
+	<![CDATA[
+		select p.no as no, p.title as title, p.contents as contents, p.reg_date as regDate, p.category_no as categoryNo
+ 		  from category as c, post as p
+ 	     where c.no = p.category_no 
+   		   and blog_id = #{blogId}
+  		   and name = '미분류'
+   	  order by p.reg_date desc
+	]]>	
+	</select>
+
+	<select id="getNo" parameterType="map" resultType="postvo">
+	<![CDATA[
+		select no as categoryNo from category where name=#{categoryName} and blog_id=#{blogId}
+	]]>
+	</select>
+	
+	<select id="selectPost" parameterType="string" resultType="postvo">
+	<![CDATA[
+		SELECT no, title, contents, category_no as categoryNo
+	      FROM post
+	     WHERE no =#{no}
+	]]>
+	</select>
+	
+	<insert id="addPost" parameterType="postvo">
+	<![CDATA[
+		 insert into post values(null, #{title}, #{contents},  now(),  #{categoryNo});
+	]]>	
+	</insert>
+	
+	<delete id="deletePost" parameterType="long">
+	<![CDATA[
+		 delete from post where no =#{no}
+	]]>	
+	</delete>
+	
+	<delete id="deleteAllPost" parameterType="long">
+	<![CDATA[
+		 delete from post where category_no =#{no}
+	]]>	
+	</delete>
+
+</mapper>
