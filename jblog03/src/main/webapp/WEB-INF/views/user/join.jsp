@@ -19,7 +19,7 @@ $(function(){
 		if(id == '') {
 			return;
 		}
-		
+		  
 		console.log(id);
 		$.ajax({
 			url: "${pageContext.request.contextPath }/user/api/checkid?id=" + id,
@@ -34,7 +34,7 @@ $(function(){
 					console.error(response.message);
 					return;
 				}
-				if(response.date) {
+				if(response.data) {
 					alert("존재하는 아이디입니다. 다른 아이디을 사용하세요.");
 					$("#id")
 						.val("")
